@@ -1,9 +1,11 @@
-package managerdirectory
+package utils
 
 import (
 	"fmt"
 	"io/fs"
 	"os"
+
+	"lab.directory/pkg/payload"
 )
 
 type Reader struct{}
@@ -21,20 +23,20 @@ func (m *Reader) getDir(path string) []fs.DirEntry {
 	return list
 }
 
-func (m *Reader) GetFilesList(path string) []DirFiles {
+func (m *Reader) GetFilesList(path string) []payload.DirFiles {
 	list := m.getDir(path)
-	result := make([]DirFiles, 0)
+	result := make([]payload.DirFiles, 0)
 
 	for _, item := range list {
 		if item.IsDir() {
 			if item.Name() != ".git" {
 				subDir := m.GetFilesList(path + item.Name() + "/")
-				subItem := DirFiles{Kind: "dir", Name: item.Name(), Sub: subDir}
+				subItem := payload.DirFiles{Kind: "dir", Name: item.Name(), Sub: subDir}
 				result = append(result, subItem)
 			}
 			continue
 		}
-		subFile := DirFiles{Kind: "file", Name: item.Name()}
+		subFile := payload.DirFiles{Kind: "file", Name: item.Name()}
 		result = append(result, subFile)
 
 	}

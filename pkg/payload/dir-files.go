@@ -1,4 +1,4 @@
-package managerdirectory
+package payload
 
 type DirFiles struct {
 	Kind string
